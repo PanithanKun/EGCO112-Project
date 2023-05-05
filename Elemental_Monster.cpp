@@ -1,8 +1,8 @@
-#include "Elemental Monster.h"
+#include "LL_and_Elemental Monster.h" 
 #include <iostream>
 #include <ctime>
 using namespace std;
-El_monster::El_monster(int atk,int hp,string name):NODE(atk,hp,name){
+El_monster::El_monster(int atk,int hp,int size,string name):NODE(atk,hp,size,name){
            srand(time(NULL));//random from time
            E=(rand())%100; //random number 0-100
            element();
@@ -44,7 +44,7 @@ void El_monster::Show_NODE(){
        if(Pyro==1){
        cout<<"Pyro"<<endl; //print Pyro
        }else if(Hydro==1){
-       cout<<"Hydro";//print Hydro
+       cout<<"Hydro"<<endl;//print Hydro
        }else if(Geo==1){
        cout<<"Geo"<<endl; //print Geo
        }else if(Anemo==1){

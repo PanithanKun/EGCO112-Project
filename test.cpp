@@ -1,15 +1,28 @@
 #include <iostream>
-#include "Elemental Monster.h"
+#include <cstring>
+#include <conio.h>
+#include "LL_and_Elemental Monster.h"
 int main(int argc,char **argv){
     int atk;
     int hp;
     string name;
-    cout<<"ATK: ";
-    cin>>atk;
-    cout<<"HP: ";
-    cin>>hp;
-    cout<<"Name: ";;
-    cin>>name;
+    char choose;
+     LL l;
+     do{
+    cout<<"CHOOSE:"<<endl;
+    cout<<"A.Random Monster"<<endl;
+    choose=getch();
+    choose=tolower(choose);
+    switch(choose){
+         case('a'):
+          l.ADD(&l);
+          system("cls");
+          l.Show_all();
+         break;
+    }
+    
+     }while(choose!='x');
+    
     
 
     return 0;

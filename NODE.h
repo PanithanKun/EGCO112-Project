@@ -3,20 +3,21 @@ using namespace std;
 class NODE {
        int E; //Elemental type
        int atk; // monster Attack DMG
+       int order;
        int hp; // monster HP
        string Name; // monster name
        //==============================
-        int Pyro=0; //Fire
-        int Hydro=0; //Water
-        int Geo=0; //Stone
-        int Anemo=0; //Wind
-        int Pyro_DMG; //Fire DMG
-        int Hydro_DMG; //Water DMG
-        int Geo_DMG; //Stone DMG
-      //================================
         NODE *nextPtr;// next pointer
+        NODE *pPtr;// Previous pointer
 public:
-      NODE(int,int,string="Unknown");
-      void Show_NODE();
+      NODE(int,int,int,string="Unknown");
       ~NODE();
+      virtual void Show_NODE();// temp show
+      void Delete_NODE();//delete
+      NODE* move_next();//nextptr
+      NODE* move_back();//previousptr
+      void set_next(NODE*); //set nextptr
+      void set_back(NODE*); //set backptr
+      string show_name();//show name
 };
+typedef NODE* NodePtr;

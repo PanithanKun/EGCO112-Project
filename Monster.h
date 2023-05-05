@@ -6,7 +6,7 @@ class monster {
        int hp; // monster HP
 public:
 
-     monster(int,int,string="Unknown");
+     monster(int,int,int,string="Unknown");
      ~monster();
      virtual void display();
 };
