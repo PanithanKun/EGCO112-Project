@@ -10,7 +10,7 @@ NODE::NODE(int Atk ,int Hp,int Or,string name){
           pPtr=NULL;
 }
 NODE::~NODE(){
-      
+      cout<<"Killed Monster "<<this->show_order()<<endl;
 }
 void NODE::Show_NODE(){
     //Print Stats
@@ -23,10 +23,10 @@ NODE* NODE::move_next(){
       return nextPtr;
 }
 void NODE::set_next(NODE* node){
-       nextPtr = node; 
+       nextPtr = node; //set nextPtr to 
 }
 void NODE::set_back(NODE* node){
-       pPtr = node;
+       pPtr = node;  //set PreviousPtr to 
 }
 string NODE::show_name(){
     return Name;
@@ -34,4 +34,9 @@ string NODE::show_name(){
 NODE* NODE::move_back(){
     return pPtr;
 }
-
+int NODE::show_order(){
+    return order;
+}
+void NODE::set_order_node(int n){
+      order=n;
+}

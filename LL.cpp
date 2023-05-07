@@ -8,8 +8,7 @@ LL::LL(){
      HeadPtr=NULL;
 }
 LL::~LL(){
-
-  
+   
 
 }    
 void LL::ADD(LL* q){
@@ -75,10 +74,10 @@ void LL::Delete_all(){
     }
 }
 void LL::Random(int& atk, int& hp){
-if(atk<10){
+if(atk<10){ //atk>=10
 atk=10;
 }
-if(hp<30){
+if(hp<30){ //hp>=30
      hp=30;
 }    
 }
@@ -102,8 +101,8 @@ int LL::Select_treat(NODE*node){
       node->Show_NODE();
      cout<<"Treat it?"<<endl;
      cout<<"y/n"<<endl;
-     cin>>select;
-     select=tolower(select);
+     cin>>select;//input 
+     select=tolower(select); //change to lowercase (just in case for the input is an Uppercase)
      if(select!='y'&&select!='n'){
          cout<<"Invalid! Try Again!"<<endl;
          fflush(stdin);
@@ -121,7 +120,89 @@ int LL::Select_treat(NODE*node){
      }while(select!='y'&& select!='n');//loop while input wrongly
      return sel;
 }
+void LL::Delete(LL* q){
+     string select;
+     NodePtr PreviousPtr=q->HeadPtr;
+     NodePtr CurrentPtr=PreviousPtr->move_next();
+     NodePtr temp=NULL;
+     NodePtr temp2=NULL;
+     do{
+     cout<<"Input Monster Number to DELETE:";
+     cin>>select;
+     cout<<"["<<stoi(select)<<"]"<<endl;
+     if(Check_num(select)){
+           if(stoi(select) == PreviousPtr->show_order()&&PreviousPtr==q->HeadPtr){
+           temp=PreviousPtr;
+           PreviousPtr=PreviousPtr->move_next();
+           q->HeadPtr=PreviousPtr;
+           delete(temp);
+           size--;
+           q->Set_order(q);
+           break;
+       }else {
+          
+          while(stoi(select) != PreviousPtr->show_order()&&CurrentPtr!=NULL){
+                 PreviousPtr=CurrentPtr;
+                 CurrentPtr=CurrentPtr->move_next();
+          }
+          
+          if(CurrentPtr!=NULL&& stoi(select) == PreviousPtr->show_order()){
+               temp=PreviousPtr;
+               PreviousPtr=PreviousPtr->move_back();
+               PreviousPtr->set_next(CurrentPtr);
+               CurrentPtr->set_back(PreviousPtr);
+               delete(temp);
+               size--; 
+             q->Set_order(q);
+               break;                         
+          }
+          if(CurrentPtr==NULL){
+               temp=PreviousPtr;
+               PreviousPtr=PreviousPtr->move_back();
+               PreviousPtr->set_next(NULL);
+               temp->set_back(NULL);
+               delete(temp);
+               size--;
+               if(size==1){
+                 CurrentPtr=PreviousPtr;
+               }else if(size>1){
+                  CurrentPtr=PreviousPtr;
+               PreviousPtr=PreviousPtr->move_back();
+     
+               }   
+              q->Set_order(q);
+               break;
+          }
+          
+  
+          
+       }
 
+     }else{
+      cout<<"Try again!"<<endl;
+      continue;
+     }
 
+     }while(1);
+
+}
+bool LL::Check_num(string str){
+      int i;
+      for(i=0; i<str.length(); i++){ //.length() like strlen()
+          if(isdigit(str[i])==false){
+               return false;
+          }
+
+      }
+    return true;
+}
+void LL::Set_order(LL*q){
+      int i;
+      NodePtr t = q->HeadPtr;
+      for(i=1; i<=size; i++){
+         t->set_order_node(i);//set number
+        t=t->move_next();
+      }
+}
 
 

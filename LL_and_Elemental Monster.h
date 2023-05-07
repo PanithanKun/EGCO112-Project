@@ -1,5 +1,5 @@
-#include "NODE.h"
 #include <iostream>
+#include "NODE.h"
 using namespace std;
 class LL{
    NodePtr HeadPtr;
@@ -7,13 +7,15 @@ class LL{
    public:
    LL();
    ~LL();
-   void ADD(LL*);
-   void Show_all();
-   void Random(int&,int&);
-   NODE* Tail_next();
-   void Delete_all();
-   bool Select(char);
+   void ADD(LL*);//add node
+   void Show_all();//show all nodes
+   void Random(int&,int&);//random stats
+   void Set_order(LL*);
+   void Delete(LL*);//delete
+   void Delete_all();//delete all nodes
+   bool Select(char);//select (yes or no
    int Select_treat(NODE*);
+   bool Check_num(string);
 };
 class El_monster :public NODE{
         int E; //Elemental type
