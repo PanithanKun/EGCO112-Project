@@ -7,27 +7,36 @@ int main(int argc,char **argv){
     int hp;
     string name;
     char choose;
-     LL l;
+    cout<<"Your name:";
+    cin>>name;
+     LL trainer(name);
      do{
+    cout<<"Hi "<<name<<'!'<<endl;
     cout<<"CHOOSE:"<<endl;
     cout<<"A.Random Monster"<<endl;
     cout<<"B.Delete Monster"<<endl;
     choose=getch();//input
     choose=tolower(choose);//lowercase
+    try{
+     if(choose<97||choose>98){
+        throw "for i in range(100) Stupid Fuck";
+     }
+    }
+    catch(const char* error){
+         cout<<error<<endl;
+         cin.clear();
+      }
     switch(choose){
          case('a'):
-          l.ADD(&l);//add note
+          trainer.ADD(&trainer);//add note
           system("cls");
-          l.Show_all();//show all nodes
+          trainer.Show_all();//show all nodes
          break;
          case('b'):
-         l.Delete(&l);//delete node
-         l.Show_all();
+         trainer.Delete(&trainer);//delete node
+         trainer.Show_all();
          break;
-         default:
-         cout<<"Invalid! Try again!"<<endl;
     }
-    
      }while(choose!='x');
     
     

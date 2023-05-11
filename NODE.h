@@ -1,10 +1,14 @@
 #include<iostream>
 using namespace std;
 class NODE {
+       int EXP; // Monster EXP
+       int Max_EXP; // Monster MAX_HP
+       int lvl; // monster level
        int E; //Elemental type
        int atk; // monster Attack DMG
        int order;//order of monster
-       int hp; // monster HP
+       int current_hp; // monster current HP
+       int Max_hp;
        string Name; // monster name
        //==============================
         NODE *nextPtr;// next pointer
@@ -20,5 +24,8 @@ public:
       string show_name();//show name
       int show_order();//show order no.
       void set_order_node(int);
+      void change_hp(int);
+      int show_hp();
+      
 };
 typedef NODE* NodePtr;

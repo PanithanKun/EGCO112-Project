@@ -3,7 +3,10 @@
 #include <ctime>
 #include <windows.h>
 using namespace std;
-LL::LL(){
+LL::LL(string n,int a){
+     trainer=n;
+     atk=a;
+     hp=100;
      size=0;
      HeadPtr=NULL;
 }
@@ -11,8 +14,8 @@ LL::~LL(){
    
 
 }    
-void LL::ADD(LL* q){
-     int sel=1;//chech selection
+void LL::ADD(LL* q){//ADD NODE
+     int sel=0;//check selection
      srand(time(NULL));
      cout<<".";
       Sleep(500);
@@ -26,11 +29,15 @@ void LL::ADD(LL* q){
      NodePtr temp = q->HeadPtr;
      NodePtr Currentptr = NULL;
      NodePtr Previousptr = NULL;
-     Random(atk,hp);
+     bool A;
+     Random(atk,hp);//Random stats
      if(!temp){
           temp= new El_monster(atk,hp,size+1,name);  // create NOde 
-          sel=Select_treat(temp);
+          sel=Select_fight(temp);
           if(sel==1){
+             A=q->fight(temp,q); // fight (false if escape and true if capture successfully)
+          }
+          if(sel==1&&A){
              q->HeadPtr=temp;//head = first NODE
           Previousptr=q->HeadPtr;
           Currentptr=q->HeadPtr;
@@ -40,8 +47,11 @@ void LL::ADD(LL* q){
           
      }else{
           temp= new El_monster(atk,hp,size+1,name);  // create NOde 
-          sel=Select_treat(temp);
+          sel=Select_fight(temp);
           if(sel==1){
+          bool A=q->fight(temp,q); // fight (false if escape and true if capture successfully)       
+          }
+          if(sel==1&&A){
            Currentptr=q->HeadPtr;
           while(Currentptr->move_next()!=NULL){
                Currentptr=Currentptr->move_next(); //move current
@@ -51,11 +61,14 @@ void LL::ADD(LL* q){
            Currentptr=temp;
            Currentptr->set_back(Previousptr);//linked pPtr 
            size++;
-          }    
+          }
+           
      }
-
+     if(sel==0||A==false||temp->show_hp()<=0){
+               delete(temp);
+          }
 }
-void LL::Show_all(){
+void LL::Show_all(){//SHOW ALL NODES
     NodePtr t=HeadPtr;
     int i;
     for(i=0; i<size; i++){
@@ -64,7 +77,7 @@ void LL::Show_all(){
      cout<<"=================================="<<endl;
     }
 }
-void LL::Delete_all(){
+void LL::Delete_all(){//DELETE ALL NODES
     NodePtr t = HeadPtr;
     while(t!=NULL){
      cout<<"Delete  "<<t->show_name()<<endl;
@@ -73,7 +86,7 @@ void LL::Delete_all(){
      t=HeadPtr;
     }
 }
-void LL::Random(int& atk, int& hp){
+void LL::Random(int& atk, int& hp){//Random stats
 if(atk<10){ //atk>=10
 atk=10;
 }
@@ -94,15 +107,16 @@ bool LL::Select( char select){
        }
        return A;
 }
-int LL::Select_treat(NODE*node){
+int LL::Select_fight(NODE*node){
      char select;
      int sel;
      do{
       node->Show_NODE();
-     cout<<"Treat it?"<<endl;
+     cout<<"Fight it?"<<endl;
      cout<<"y/n"<<endl;
      cin>>select;//input 
      select=tolower(select); //change to lowercase (just in case for the input is an Uppercase)
+     cout<<'['<<select<<']'<<endl;
      if(select!='y'&&select!='n'){
          cout<<"Invalid! Try Again!"<<endl;
          fflush(stdin);
@@ -117,15 +131,17 @@ int LL::Select_treat(NODE*node){
          break;
         }
      }
-     }while(select!='y'&& select!='n');//loop while input wrongly
+     }while(select!='y'&&select!='n');//loop while input wrongly
      return sel;
 }
 void LL::Delete(LL* q){
+ if(size>0){
      string select;
      NodePtr PreviousPtr=q->HeadPtr;
      NodePtr CurrentPtr=PreviousPtr->move_next();
      NodePtr temp=NULL;
      NodePtr temp2=NULL;
+    
      do{
      cout<<"Input Monster Number to DELETE:";
      cin>>select;
@@ -174,8 +190,6 @@ void LL::Delete(LL* q){
                break;
           }
           
-  
-          
        }
 
      }else{
@@ -184,6 +198,9 @@ void LL::Delete(LL* q){
      }
 
      }while(1);
+  }else{
+    cout<<"No monster to kill!"<<endl;
+  }
 
 }
 bool LL::Check_num(string str){
@@ -204,5 +221,122 @@ void LL::Set_order(LL*q){
         t=t->move_next();
       }
 }
+bool LL::fight(NODE *t,LL*q){
+    char select;
+    bool A;
+    do{
+     t->Show_NODE();
+     cout<<"CHOOSE:"<<endl;
+    cout<<"A.Attack"<<endl;
+    cout<<"B.Use Potion"<<endl;
+    cout<<"C.Capture"<<endl;
+    cout<<"D.Escape"<<endl;
+    cin>>select;
+    select=tolower(select);
+    switch (select)
+    {
+    case ('a'):
+    if(t->show_hp()>0){
+      q->attack(t);
+    }
+        break;
+    case('b'):
+        q->use_potion();
+        break;
+    case('c'):
+       A=true;
+     break;
+     case('d'):
+     A=false;
+     break;
+    }
+    cout<<'['<<select<<']'<<endl;
+    }while(select>=97&&select<=99&&t->show_hp()>0);
+    return A;
+}
+int LL::show_attack(){
+      return atk;
+}
+void LL::attack(NODE *t){
+     int atk=0;
+    int DMG;
+    int Crit;
+    int order;
+    srand(time(NULL));
+    Crit=(int)(rand()%3);
+    if(Crit!=1){
+      Crit=0;
+    }
+   while(atk<=0)
+   {
+    Sleep(500);
+      atk=(rand()%11);
+   }
+    DMG=atk+((0.1)*max_hp);
+   
+   if(Crit==1){
 
+    DMG=DMG*(1+0.5);
+   }
+   Sleep(1500);
+   if(max_hp>0){
+if(t->show_hp()-(DMG)>0){
+  t->change_hp(DMG);
+  if(Crit==0){
+   cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+  }else if(Crit==1){
+    cout<<"[Critical ATK!]"<<endl;
+    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+  }
+} else if(t->show_hp()-(DMG)<=0){
+     hp=0;
+   if(check_dead==0){
+    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+     cout<<'['<<t->show_name()<<" got killed! "<<']'<<endl;
+     check_dead=1;
+   }
+    } else if(max_hp==0)
+{
+  cout<<'['<<t->show_name()<<" is already dead! "<<']'<<endl; 
+}
+  Sleep(1500);
+        
+  }
+}
+void LL::use_potion(){
+   int Bonus_heal;
+  Bonus_heal=5+(0.3*max_hp);
+      if(hp>0)
+      {
+        if(hp+Bonus_heal<=max_hp)
+        {
+           hp=hp+(Bonus_heal);
+            potions--;
+        }else if(hp+Bonus_heal>max_hp)
+          {
+        hp = max_hp;
+        potions--;
+          }
+          Sleep(1000);
+       cout<<'['<<trainer<<" heals yourself "<<Bonus_heal<<" HP]"<<endl;
+       Sleep(1000);   
+      }  
+         
 
+       if(hp<=0){
+        Sleep(1000); 
+       cout<<"HP IS 0 CANT HEAL!"<<endl;    
+       Sleep(1000);  
+       }
+   
+}
+int LL::show_potion(){
+     return potions;
+}
+int LL::show_hp(){
+     return hp;
+}
+int LL::show_Max_hp(){
+
+     return max_hp;
+}
