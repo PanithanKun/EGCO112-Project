@@ -26,6 +26,9 @@ public:
       void set_order_node(int);
       void change_hp(int);
       int show_hp();
+      void set_name(string);
+      int show_Max_hp();
+      virtual void attack(NODE*,LL* = NULL);//monster use elemental skills
       
 };
 typedef NODE* NodePtr;

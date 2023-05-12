@@ -51,3 +51,6 @@ void NODE::change_hp(int atk){
 int NODE::show_hp(){
     return current_hp;
 }
+int NODE::show_Max_hp(){
+    return Max_hp;
+}

@@ -29,6 +29,7 @@ class LL{
    int Select_fight(NODE*);//select fight
    bool Check_num(string);//check var
    int show_Max_hp();//show max_hp
+   bool capture(NODE*t);
 };
 class El_monster :public NODE{
         int E; //Elemental type
@@ -47,4 +48,6 @@ public:
      ~El_monster();
      void element(); // set Element
      void Show_NODE();
+     void attack(NODE*,LL* = NULL);//monster use elemental skills
 };
+typedef El_monster* ElPtr;

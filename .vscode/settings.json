@@ -6,6 +6,8 @@
         "cstdlib": "cpp",
         "system_error": "cpp",
         "typeinfo": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "algorithm": "cpp",
+        "iosfwd": "cpp"
     }
 }

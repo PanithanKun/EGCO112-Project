@@ -52,3 +52,7 @@ void El_monster::Show_NODE(){
        }
        NODE::Show_NODE();
 }
+void El_monster::attack(NODE* t,LL* q){
+        
+
+}

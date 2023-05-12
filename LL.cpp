@@ -16,13 +16,14 @@ LL::~LL(){
 }    
 void LL::ADD(LL* q){//ADD NODE
      int sel=0;//check selection
+     string n;
      srand(time(NULL));
      cout<<".";
       Sleep(500);
     int atk=(rand())%20;//ATK DMG 0-20
       cout<<".";
       Sleep(500);
-   int hp=(rand())%60;//HP 0-60
+   int hp=(rand())%101;//HP 0-60
       cout<<"."<<endl;
       Sleep(500);
     string name="Unknown";//Monster name
@@ -42,6 +43,9 @@ void LL::ADD(LL* q){//ADD NODE
           Previousptr=q->HeadPtr;
           Currentptr=q->HeadPtr;
           size++;
+          cout<<"Set name Monster: "<<endl;
+          cin>>n;
+          temp->set_name(n);
           //prev and current point the same place
           }
           
@@ -61,6 +65,9 @@ void LL::ADD(LL* q){//ADD NODE
            Currentptr=temp;
            Currentptr->set_back(Previousptr);//linked pPtr 
            size++;
+           cout<<"Set name Monster: "<<endl;
+          cin>>n;
+          temp->set_name(n);
           }
            
      }
@@ -90,11 +97,11 @@ void LL::Random(int& atk, int& hp){//Random stats
 if(atk<10){ //atk>=10
 atk=10;
 }
-if(hp<30){ //hp>=30
-     hp=30;
+if(hp<50){ //hp>=50
+     hp=50;
 }    
 }
-bool LL::Select( char select){
+bool LL::Select( char select){//check select
      bool A;
        switch (select)
        {
@@ -107,7 +114,7 @@ bool LL::Select( char select){
        }
        return A;
 }
-int LL::Select_fight(NODE*node){
+int LL::Select_fight(NODE*node){//select fight
      char select;
      int sel;
      do{
@@ -134,7 +141,7 @@ int LL::Select_fight(NODE*node){
      }while(select!='y'&&select!='n');//loop while input wrongly
      return sel;
 }
-void LL::Delete(LL* q){
+void LL::Delete(LL* q){//delete node
  if(size>0){
      string select;
      NodePtr PreviousPtr=q->HeadPtr;
@@ -225,6 +232,7 @@ bool LL::fight(NODE *t,LL*q){
     char select;
     bool A;
     do{
+      int turn=1;
      t->Show_NODE();
      cout<<"CHOOSE:"<<endl;
     cout<<"A.Attack"<<endl;
@@ -233,6 +241,7 @@ bool LL::fight(NODE *t,LL*q){
     cout<<"D.Escape"<<endl;
     cin>>select;
     select=tolower(select);
+    cout<<'['<<select<<']'<<endl;
     switch (select)
     {
     case ('a'):
@@ -241,37 +250,49 @@ bool LL::fight(NODE *t,LL*q){
     }
         break;
     case('b'):
-        q->use_potion();
+       if(q->show_potion()>0){
+         q->use_potion();
+       }else{
+       cout<<"Potion is Empty"<<endl;
+       }
         break;
     case('c'):
+    if(q->capture(t)){
+      cout<<"Capture Successfully!"<<endl;
        A=true;
+    }else{
+      cout<<"Caoture Failed!"<<endl;
+      A=false;
+    }
      break;
      case('d'):
      A=false;
      break;
     }
-    cout<<'['<<select<<']'<<endl;
-    }while(select>=97&&select<=99&&t->show_hp()>0);
+    if(select!='d'){
+       turn=0;
+       cout<<"Out of Turn!"<<endl;
+       t->attack(t,q);
+    }
+    
+    if(t->show_hp()<=0){
+       cout<<"Monster "<<t->show_name()<<"have been killed"<<endl;
+    }
+    }while(select>=97&&select<=99&&t->show_hp()>0&& A==false);
     return A;
 }
 int LL::show_attack(){
       return atk;
 }
 void LL::attack(NODE *t){
-     int atk=0;
     int DMG;
     int Crit;
     int order;
     srand(time(NULL));
-    Crit=(int)(rand()%3);
-    if(Crit!=1){
+    Crit=(int)(rand()%10);
+    if(Crit%2!=0){
       Crit=0;
     }
-   while(atk<=0)
-   {
-    Sleep(500);
-      atk=(rand()%11);
-   }
     DMG=atk+((0.1)*max_hp);
    
    if(Crit==1){
@@ -321,8 +342,6 @@ void LL::use_potion(){
        cout<<'['<<trainer<<" heals yourself "<<Bonus_heal<<" HP]"<<endl;
        Sleep(1000);   
       }  
-         
-
        if(hp<=0){
         Sleep(1000); 
        cout<<"HP IS 0 CANT HEAL!"<<endl;    
@@ -339,4 +358,35 @@ int LL::show_hp(){
 int LL::show_Max_hp(){
 
      return max_hp;
+}
+bool LL::capture(NODE *t){
+  int change;
+  bool A;
+     if(t->show_hp()==t->show_Max_hp()){
+         A=false;
+     }
+     if(t->show_hp()<=(0.5)*t->show_Max_hp()){
+        change=rand()%100;
+        if(change>50){
+          A=true;
+        }else{
+          A=false;
+        }
+
+      }else if(t->show_hp()<=(0.3)*t->show_Max_hp()){
+        change=rand()%100;
+        if(change>70){
+          A=true;
+        }else{
+          A=false;
+        }
+    }else if(t->show_hp()<=(0.1)*t->show_Max_hp()){
+        change=rand()%198;
+        if(change>99){
+          A=true;
+        }else{
+          A=false;
+        }
+}
+        return A;
 }
