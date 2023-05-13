@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <conio.h>
-#include "LL_and_Elemental Monster.h"
+#include "LL_and_Elemental Monster.h" 
 int main(int argc,char **argv){
     int atk;
     int hp;
@@ -12,6 +12,8 @@ int main(int argc,char **argv){
      LL trainer(name);
      do{
     cout<<"Hi "<<name<<'!'<<endl;
+    cout<<""<<trainer.show_size()<<"/"<<"6"<<endl;
+    trainer.Show_all();
     cout<<"CHOOSE:"<<endl;
     cout<<"A.Random Monster"<<endl;
     cout<<"B.Delete Monster"<<endl;
@@ -28,17 +30,24 @@ int main(int argc,char **argv){
       }
     switch(choose){
          case('a'):
-          trainer.ADD(&trainer);//add note
+         trainer.Show_all();//show all nodes
+         if(trainer.show_size()<=6){
+             trainer.ADD(&trainer);//add note
           system("cls");
-          trainer.Show_all();//show all nodes
+         }else{
+           cout<<"Maximum of monsters are 6!"<<endl;
+         }
          break;
          case('b'):
          trainer.Delete(&trainer);//delete node
          trainer.Show_all();
          break;
     }
-     }while(choose!='x');
-    
+     }while(choose!='x'&&trainer.show_hp()>0);
+    if(trainer.show_hp()<=0){
+      system("cls");
+      cout<<"GAME OVER"<<endl;
+    }
     
 
     return 0;

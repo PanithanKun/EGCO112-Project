@@ -1,4 +1,4 @@
-#include "NODE.h"
+#include "LL_and_Elemental Monster.h" 
 #include <iostream>
 using namespace std;
 NODE::NODE(int Atk ,int Hp,int Or,string name){
@@ -45,12 +45,46 @@ int NODE::show_order(){
 void NODE::set_order_node(int n){ ///set monster order
       order=n;
 }
-void NODE::change_hp(int atk){
-    current_hp-=atk;
+void NODE::change_hp(int atk){   
+    if(current_hp-atk>=0){
+        current_hp-=atk;
+    }else if(current_hp-atk<=0){
+        current_hp=0;
+    }
 }
 int NODE::show_hp(){
     return current_hp;
 }
 int NODE::show_Max_hp(){
     return Max_hp;
+}
+int NODE::show_atk(){
+   return atk;
+}
+void NODE::set_name(string n){
+     Name=n;
+}
+int NODE::show_elemental_DMG(){
+
+    return elemental_DMG;
+
+}
+void NODE::set_elemental_DMG(int d){
+
+   elemental_DMG=d;
+ 
+
+}
+
+void NODE::attack(NODE*t){
+
+
+
+
+}
+string NODE::show_elemental(){
+
+  
+
+     return "EEEE";
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "NODE.h"
 using namespace std;
+typedef NODE* NodePtr;
 class LL{
    NodePtr HeadPtr;
    string trainer;
@@ -9,9 +10,8 @@ class LL{
    int max_hp=100;
    int hp=max_hp;
    int potions=3;
-   int check_dead=0;
    public:
-   LL(string="Hum",int=10);
+   LL(string="Hum",int=20);
    ~LL();
    void ADD(LL*);//add node
    void Show_all();//show all nodes
@@ -19,6 +19,7 @@ class LL{
    void Set_order(LL*);//set order
    bool fight(NODE*,LL*);//fight monster
    void Delete(LL*);//delete
+   string show_name();
    int show_hp();//show hp
    int show_potion();//show potions
    void Delete_all();//delete all nodes
@@ -30,6 +31,9 @@ class LL{
    bool Check_num(string);//check var
    int show_Max_hp();//show max_hp
    bool capture(NODE*t);
+   int show_size();
+   void change_hp(int);
+   void take_DMG(NODE*);
 };
 class El_monster :public NODE{
         int E; //Elemental type
@@ -47,7 +51,9 @@ public:
      El_monster(int,int,int,string="Unknown"); //Create Element of monster 
      ~El_monster();
      void element(); // set Element
-     void Show_NODE();
-     void attack(NODE*,LL* = NULL);//monster use elemental skills
+     void Show_NODE();//show node
+     void attack(NODE*,LL*q);//monster use elemental skills
+     void set_DMG();// set elemental DMG
+     string show_elemental();
 };
 typedef El_monster* ElPtr;

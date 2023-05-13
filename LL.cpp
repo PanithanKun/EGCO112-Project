@@ -1,4 +1,4 @@
-#include "LL_and_Elemental Monster.h"
+#include "LL_and_Elemental Monster.h" 
 #include <iostream>
 #include <ctime>
 #include <windows.h>
@@ -234,6 +234,7 @@ bool LL::fight(NODE *t,LL*q){
     do{
       int turn=1;
      t->Show_NODE();
+     cout<<"Trainer "<<q->show_name()<<"\t"<<"HP: "<<q->show_hp()<<endl;
      cout<<"CHOOSE:"<<endl;
     cout<<"A.Attack"<<endl;
     cout<<"B.Use Potion"<<endl;
@@ -261,7 +262,7 @@ bool LL::fight(NODE *t,LL*q){
       cout<<"Capture Successfully!"<<endl;
        A=true;
     }else{
-      cout<<"Caoture Failed!"<<endl;
+      cout<<"Capture Failed!"<<endl;
       A=false;
     }
      break;
@@ -269,16 +270,20 @@ bool LL::fight(NODE *t,LL*q){
      A=false;
      break;
     }
-    if(select!='d'){
+    if(select!='d'&&A==false){
        turn=0;
-       cout<<"Out of Turn!"<<endl;
-       t->attack(t,q);
+       if(turn==0){
+          cout<<"Out of Turn!"<<endl;
+         q->take_DMG(t);
+       }                                                                                                                                                                                                                                                                                                         
     }
-    
     if(t->show_hp()<=0){
-       cout<<"Monster "<<t->show_name()<<"have been killed"<<endl;
+      system("cls");
+      Sleep(1500);
+       cout<<"Monster "<<t->show_name()<<" have been killed"<<endl;
+      Sleep(1500);
     }
-    }while(select>=97&&select<=99&&t->show_hp()>0&& A==false);
+    }while(select>=97&&select<=99&&t->show_hp()>0&& A==false&&q->show_hp()>0);
     return A;
 }
 int LL::show_attack(){
@@ -287,21 +292,23 @@ int LL::show_attack(){
 void LL::attack(NODE *t){
     int DMG;
     int Crit;
-    int order;
+    int count=0;
     srand(time(NULL));
-    Crit=(int)(rand()%10);
-    if(Crit%2!=0){
+    Crit=(int)(rand()%100);
+    if(Crit>=95){
+      Crit=1;
+    }else{
       Crit=0;
     }
-    DMG=atk+((0.1)*max_hp);
+    DMG=atk+((0.1)*t->show_Max_hp());
    
    if(Crit==1){
 
     DMG=DMG*(1+0.5);
    }
    Sleep(1500);
-   if(max_hp>0){
-if(t->show_hp()-(DMG)>0){
+   if(t->show_Max_hp()>0){
+if(t->show_hp()-(DMG)>0&&count==0){
   t->change_hp(DMG);
   if(Crit==0){
    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
@@ -309,20 +316,17 @@ if(t->show_hp()-(DMG)>0){
     cout<<"[Critical ATK!]"<<endl;
     cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
   }
-} else if(t->show_hp()-(DMG)<=0){
-     hp=0;
-   if(check_dead==0){
-    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
-     cout<<'['<<t->show_name()<<" got killed! "<<']'<<endl;
-     check_dead=1;
-   }
-    } else if(max_hp==0)
-{
-  cout<<'['<<t->show_name()<<" is already dead! "<<']'<<endl; 
+  count++;
 }
+if(t->show_hp()-(DMG)<=0&&count==0){
+     t->change_hp(DMG);
+     count++;
+    } 
+ {
   Sleep(1500);
         
   }
+}
 }
 void LL::use_potion(){
    int Bonus_heal;
@@ -352,12 +356,18 @@ void LL::use_potion(){
 int LL::show_potion(){
      return potions;
 }
+int LL::show_size(){
+     return size;
+}
 int LL::show_hp(){
      return hp;
 }
 int LL::show_Max_hp(){
 
      return max_hp;
+}
+string LL::show_name(){
+  return trainer;
 }
 bool LL::capture(NODE *t){
   int change;
@@ -367,7 +377,7 @@ bool LL::capture(NODE *t){
      }
      if(t->show_hp()<=(0.5)*t->show_Max_hp()){
         change=rand()%100;
-        if(change>50){
+        if(change<50){
           A=true;
         }else{
           A=false;
@@ -375,18 +385,66 @@ bool LL::capture(NODE *t){
 
       }else if(t->show_hp()<=(0.3)*t->show_Max_hp()){
         change=rand()%100;
-        if(change>70){
+        if(change<70){
           A=true;
         }else{
           A=false;
         }
     }else if(t->show_hp()<=(0.1)*t->show_Max_hp()){
-        change=rand()%198;
-        if(change>99){
+        change=rand()%100;
+        if(change<99){
           A=true;
         }else{
           A=false;
         }
 }
         return A;
+}
+void LL::change_hp(int DMG){
+       hp-=DMG;
+       if(hp-=DMG<=0){
+        hp=0;
+       }
+      
+}
+void LL::take_DMG(NODE*t){
+     int DMG;
+    int Crit;
+    int count=0;
+    srand(time(NULL));
+    Crit=(int)(rand()%100);
+    if(Crit>=95){
+      Crit=1;
+    }else{
+      Crit=0;
+    }
+    DMG=t->show_elemental_DMG()+((0.1)*max_hp);
+   
+   if(Crit==1){
+
+    DMG=DMG*(1+0.5);
+   }
+   Sleep(1500);
+   if(max_hp>0){
+if(hp-(DMG)>0&&count==0){
+  hp-=DMG;
+  if(Crit==0){
+    Sleep(1000); 
+   cout<<'['<<trainer<<" takes "<<t->show_elemental()<<" "<<DMG<<" DMG!]"<<endl;
+   Sleep(1000); 
+  }else if(Crit==1){
+    Sleep(1000); 
+    cout<<"[Critical ATK!]"<<endl;
+    Sleep(1000); 
+    cout<<'['<<trainer<<" takes "<<t->show_elemental()<<" "<<DMG<<" DMG!]"<<endl;
+    Sleep(1000); 
+  }
+  count++;
+} 
+if(hp-(DMG)<=0&&count==0){
+     hp=0;
+     count++;
+  }
+    
+}
 }

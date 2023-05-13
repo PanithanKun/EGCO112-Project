@@ -1,11 +1,11 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 class NODE {
        int EXP; // Monster EXP
        int Max_EXP; // Monster MAX_HP
        int lvl; // monster level
-       int E; //Elemental type
        int atk; // monster Attack DMG
+       int elemental_DMG;// monster elemental DMG
        int order;//order of monster
        int current_hp; // monster current HP
        int Max_hp;
@@ -13,6 +13,7 @@ class NODE {
        //==============================
         NODE *nextPtr;// next pointer
         NODE *pPtr;// Previous pointer
+
 public:
       NODE(int,int,int,string="Unknown");
       ~NODE();
@@ -27,8 +28,11 @@ public:
       void change_hp(int);
       int show_hp();
       void set_name(string);
+      int show_atk();
       int show_Max_hp();
-      virtual void attack(NODE*,LL* = NULL);//monster use elemental skills
-      
+      void set_elemental_DMG(int);
+      int show_elemental_DMG();
+      virtual void attack(NODE*);//monster use elemental skills
+      virtual string show_elemental();
 };
 typedef NODE* NodePtr;
