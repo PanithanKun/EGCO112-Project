@@ -27,13 +27,17 @@ class LL{
    void attack(NODE*);//attack monster
    int  show_attack();//show ATK
    void use_potion();//use potion
+   void use_potion_to_monster(NODE*);// use potion to omonster
    int Select_fight(NODE*);//select fight
    bool Check_num(string);//check var
    int show_Max_hp();//show max_hp
-   bool capture(NODE*t);
-   int show_size();
-   void change_hp(int);
-   void take_DMG(NODE*);
+   bool capture(NODE*t);//capture monster
+   int show_size();//show size
+   void change_hp(int);//change hp
+   void take_DMG(NODE*);//take dmg received
+   void heal_all(LL*);
+   void delete_dead_monster(NODE*,LL*);
+   NODE* select_monster(int);//select monster (if size >0)
 };
 class El_monster :public NODE{
         int E; //Elemental type
@@ -52,8 +56,9 @@ public:
      ~El_monster();
      void element(); // set Element
      void Show_NODE();//show node
-     void attack(NODE*,LL*q);//monster use elemental skills
+     void attack(NODE*);//monster use elemental skills
      void set_DMG();// set elemental DMG
-     string show_elemental();
+     string show_elemental();//show elemental
+     int weakness_resistance(NODE*,int);//check elemental weakness each others
 };
 typedef El_monster* ElPtr;

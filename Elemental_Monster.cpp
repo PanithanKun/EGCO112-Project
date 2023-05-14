@@ -54,26 +54,19 @@ void El_monster::Show_NODE(){
        }
        NODE::Show_NODE();
 }
-void El_monster::attack(NODE* t,LL* q){
+void El_monster::attack(NODE* t){
      int DMG;
     int Crit;
      if(Pyro==1){
-         Pyro_DMG=t->show_atk()*(1+0.1);//set Pyro DMG
          DMG=Pyro_DMG;
        }else if(Hydro==1){
-         Hydro_DMG=t->show_atk()*(1+0.1);//set Hydro DMG
          DMG=Hydro_DMG;
        }else if(Geo==1){
         DMG=Geo_DMG;
-        Geo_DMG=t->show_atk()*(1+0.1);//set Geo DMG
        }else if(Anemo==1){
-       Anemo_DMG=t->show_atk()*(1+0.1);//set Anemo DMG
         DMG=Anemo_DMG;
        }
-
-   if(q!=NULL){
-     if(q->show_size()==0){
-    
+       DMG=weakness_resistance(t,DMG);
     srand(time(NULL));
     Crit=(int)(rand()%100);
     if(Crit>=95){
@@ -81,29 +74,32 @@ void El_monster::attack(NODE* t,LL* q){
     }else{
       Crit=0;
     }
-    DMG*=(0.1*t->show_Max_hp());
+    DMG+=(0.1*NODE::show_Max_hp());
    if(Crit==1){
 
     DMG=DMG*(1+0.5);
    }
    Sleep(1500);
-   if(q->show_hp()>=0){
-if(q->show_hp()-(DMG)>0){
-  q->change_hp(DMG);
+   if(t->show_hp()>=0){
+if(t->show_hp()-(DMG)>0){
+  t->change_hp(DMG);
   if(Crit==0){
-   cout<<'['<<q->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+   cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
   }else if(Crit==1){
     cout<<"[Critical ATK!]"<<endl;
-    cout<<'['<<q->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
   }
-} else if(q->show_hp()-(DMG)<=0){
-     q->change_hp(0);
+} else if(t->show_hp()-(DMG)<=0){
+    if(Crit==0){
+   cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+  }else if(Crit==1){
+    cout<<"[Critical ATK!]"<<endl;
+    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
     Sleep(1500);
    }     
+   t->change_hp(DMG); 
+  } 
    }
-  }
-   }
-   
 }
 void El_monster::set_DMG(){
   int DMG;
@@ -135,4 +131,52 @@ string El_monster::show_elemental(){
        }
 
     return e;
+}
+int El_monster::weakness_resistance(NODE*t,int dmg){
+   //weakness +30%dmg
+   if(this->show_elemental()=="Pyro"&&t->show_elemental()=="Anemo"){
+      dmg+=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's more Effective!"<<endl;
+      Sleep(1000);
+   }else if(this->show_elemental()=="Anemo"&&t->show_elemental()=="Geo"){
+      dmg+=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's more Effective!"<<endl;
+      Sleep(1000);
+   }else if(this->show_elemental()=="Geo"&&t->show_elemental()=="Hydro"){
+      dmg+=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's more Effective!"<<endl;
+      Sleep(1000);
+   }else if(this->show_elemental()=="Hydro"&&t->show_elemental()=="Pyro"){
+      dmg+=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's more Effective!"<<endl;
+      Sleep(1000);
+   }
+   //resistance less 30%dmg
+    if(this->show_elemental()=="Anemo"&&t->show_elemental()=="Pyro"){
+      dmg-=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's not Effective!"<<endl;
+      Sleep(1000);
+   }else if(this->show_elemental()=="Geo"&&t->show_elemental()=="Anemo"){
+      dmg-=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's not Effective!"<<endl;
+      Sleep(1000);
+   }else if(this->show_elemental()=="Hydro"&&t->show_elemental()=="Geo"){
+      dmg-=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's not Effective!"<<endl;
+      Sleep(1000);
+   }else if(this->show_elemental()=="Pyro"&&t->show_elemental()=="Hydro"){
+      dmg-=(0.3*dmg);
+      Sleep(1000);
+      cout<<"It's not Effective!"<<endl;
+      Sleep(1000);
+   }
+
+   return dmg;
 }

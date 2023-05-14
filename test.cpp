@@ -13,24 +13,26 @@ int main(int argc,char **argv){
      do{
     cout<<"Hi "<<name<<'!'<<endl;
     cout<<""<<trainer.show_size()<<"/"<<"6"<<endl;
+    cout<<"trainer: "<<trainer.show_name()<<"\t"<<trainer.show_hp()<<"/"<<trainer.show_Max_hp()<<endl;
     trainer.Show_all();
     cout<<"CHOOSE:"<<endl;
     cout<<"A.Random Monster"<<endl;
     cout<<"B.Delete Monster"<<endl;
+    cout<<"C.heal All"<<endl;
     choose=getch();//input
     choose=tolower(choose);//lowercase
     try{
-     if(choose<97||choose>98){
+     if(choose<97||choose>99){
         throw "for i in range(100) Stupid Fuck";
      }
     }
     catch(const char* error){
          cout<<error<<endl;
          cin.clear();
+        cin.ignore(50,'\n');
       }
     switch(choose){
          case('a'):
-         trainer.Show_all();//show all nodes
          if(trainer.show_size()<=6){
              trainer.ADD(&trainer);//add note
           system("cls");
@@ -41,6 +43,9 @@ int main(int argc,char **argv){
          case('b'):
          trainer.Delete(&trainer);//delete node
          trainer.Show_all();
+         break;
+         case('c'):
+         trainer.heal_all(&trainer);
          break;
     }
      }while(choose!='x'&&trainer.show_hp()>0);

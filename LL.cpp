@@ -231,7 +231,10 @@ void LL::Set_order(LL*q){
 bool LL::fight(NODE *t,LL*q){
     char select;
     bool A;
+    int fight=0;
     do{
+    if(q->size==0){
+     do{
       int turn=1;
      t->Show_NODE();
      cout<<"Trainer "<<q->show_name()<<"\t"<<"HP: "<<q->show_hp()<<endl;
@@ -254,13 +257,17 @@ bool LL::fight(NODE *t,LL*q){
        if(q->show_potion()>0){
          q->use_potion();
        }else{
+        Sleep(1000);
        cout<<"Potion is Empty"<<endl;
+       Sleep(1000);
+       continue;
        }
         break;
     case('c'):
     if(q->capture(t)){
       cout<<"Capture Successfully!"<<endl;
        A=true;
+       fight=1;
     }else{
       cout<<"Capture Failed!"<<endl;
       A=false;
@@ -272,7 +279,7 @@ bool LL::fight(NODE *t,LL*q){
     }
     if(select!='d'&&A==false){
        turn=0;
-       if(turn==0){
+       if(turn==0&&t->show_hp()>0){
           cout<<"Out of Turn!"<<endl;
          q->take_DMG(t);
        }                                                                                                                                                                                                                                                                                                         
@@ -282,8 +289,98 @@ bool LL::fight(NODE *t,LL*q){
       Sleep(1500);
        cout<<"Monster "<<t->show_name()<<" have been killed"<<endl;
       Sleep(1500);
+      fight=1;
+    }
+    if(q->show_hp()==0){
+       fight=1;
     }
     }while(select>=97&&select<=99&&t->show_hp()>0&& A==false&&q->show_hp()>0);
+    }else if(q->show_size()>0){
+      int sel=0;
+    do{
+      int turn=1;
+      int order;
+      NodePtr select_mon=NULL;
+      q->Show_all();
+          if(sel==0){
+       do{
+       cout<<"CHOOSE Monster (order no.):"<<endl;
+       cin>>order; 
+       select_mon = select_monster(order);
+       try{
+        if(select_mon==NULL||order>size){
+          throw "Can't find Try again!";
+       }
+       }
+       catch(const char* n){
+        cout<<n<<endl;
+        cin.clear();
+        cin.ignore(50,'\n');
+       }
+       
+      }while(select_mon==NULL||order>size);
+      sel++;
+      }
+      t->Show_NODE();
+     select_mon->Show_NODE();
+     cout<<"CHOOSE:"<<endl;
+    cout<<"A.Attack"<<endl;
+    cout<<"B.Use Potion to Monster"<<endl;
+    cout<<"C.Capture"<<endl;
+    cout<<"D.Escape"<<endl;
+    cin>>select;
+    select=tolower(select);
+    cout<<'['<<select<<']'<<endl;
+    switch (select)
+    {
+    case ('a'):
+    if(t->show_hp()>0){
+      select_mon->attack(t);
+    }
+        break;
+    case('b'):
+       if(q->show_potion()>0){
+         q->use_potion_to_monster(select_mon);
+       }else{
+       cout<<"Potion is Empty"<<endl;
+       }
+        break;
+    case('c'):
+    if(q->capture(t)){
+      cout<<"Capture Successfully!"<<endl;
+       A=true;
+       fight=1;
+    }else{
+      cout<<"Capture Failed!"<<endl;
+      A=false;
+    }
+     break;
+     case('d'):
+     A=false;
+     break;
+    }
+    if(select!='d'&&A==false){
+       turn=0;
+       if(turn==0&&t->show_hp()>0){
+          cout<<"Out of Turn!"<<endl;
+         t->attack(select_mon);
+       }                                                                                                                                                                                                                                                                                                         
+    }
+    if(select_mon->show_hp()<=0){
+      cout<<"Monster "<<select_mon->show_name()<<" have been killed"<<endl;
+      q->delete_dead_monster(select_mon,q);
+    }
+    if(t->show_hp()<=0){
+      system("cls");
+      Sleep(1500);
+       cout<<"Monster "<<t->show_name()<<" have been killed"<<endl;
+      Sleep(1500);
+      fight=1;
+    }
+    }while(select>=97&&select<=99&&t->show_hp()>0&& A==false&&q->show_hp()>0);
+
+    }
+    }while(fight==0);
     return A;
 }
 int LL::show_attack(){
@@ -319,14 +416,20 @@ if(t->show_hp()-(DMG)>0&&count==0){
   count++;
 }
 if(t->show_hp()-(DMG)<=0&&count==0){
-     t->change_hp(DMG);
-     count++;
+   if(Crit==0){
+   cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+  }else if(Crit==1){
+    cout<<"[Critical ATK!]"<<endl;
+    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
     } 
- {
+    t->change_hp(DMG);
+     count++;       
+      {
   Sleep(1500);
         
+         }
+      }
   }
-}
 }
 void LL::use_potion(){
    int Bonus_heal;
@@ -377,7 +480,7 @@ bool LL::capture(NODE *t){
      }
      if(t->show_hp()<=(0.5)*t->show_Max_hp()){
         change=rand()%100;
-        if(change<50){
+        if(change%2==0){
           A=true;
         }else{
           A=false;
@@ -447,4 +550,80 @@ if(hp-(DMG)<=0&&count==0){
   }
     
 }
+}
+NODE* LL::select_monster(int n){
+NodePtr t =  NULL;
+NodePtr temp = HeadPtr;
+int i;
+   for(i=0;i<size;i++){
+      if(temp->show_order()==n){
+        t=temp;
+        break;
+      }
+     if(i==size&&t->show_order()!=n){
+      t=NULL;
+     }
+   }
+   return t;
+}
+void LL::use_potion_to_monster(NODE*t ){
+    int Bonus_heal;
+    int heal=20;
+  Bonus_heal=heal+(0.3*t->show_Max_hp());
+      if(t->show_hp()>0)
+      {
+        if(t->show_hp()+Bonus_heal<=t->show_Max_hp())
+        {
+            t->heal(Bonus_heal);
+            potions--;
+        }
+          Sleep(1000);
+       cout<<'['<<trainer<<" heals monster "<<t->show_name()<<" "<<Bonus_heal<<" HP]"<<endl;
+       Sleep(1000);   
+      }  
+}
+void LL::heal_all(LL* q){
+   hp=max_hp;
+  NodePtr temp=q->HeadPtr;
+  while(temp){
+    temp->heal(temp->show_Max_hp());
+    temp=temp->move_next();
+  }
+  Sleep(750);
+  cout<<"All healed!"<<endl;
+  Sleep(750);
+}
+void LL::delete_dead_monster(NODE*t,LL* q){//delete node
+     string select;
+     NodePtr PreviousPtr=q->HeadPtr;
+     NodePtr CurrentPtr=PreviousPtr->move_next();
+     NodePtr temp=NULL;
+     NodePtr temp2=NULL;
+     if(t->show_order()==1){
+      temp=t;
+       q->HeadPtr=q->HeadPtr->move_next();
+       CurrentPtr=q->HeadPtr;
+       PreviousPtr=temp;
+       CurrentPtr->set_back(NULL);
+       PreviousPtr->set_next(NULL);
+       delete(temp);
+     }else if (t->show_order()>1&&t->show_order()<q->show_size()){
+         temp=t;
+         PreviousPtr=temp->move_back();
+         CurrentPtr=temp->move_next();
+         PreviousPtr->set_next(CurrentPtr);
+         CurrentPtr->set_back(PreviousPtr);
+         temp->set_back(NULL);
+         temp->set_next(NULL);
+         delete(temp);
+
+     }else if(t->show_order()==size){
+      temp =t;
+      PreviousPtr=temp->move_back();
+      CurrentPtr=temp;
+      PreviousPtr->set_next(NULL);
+      CurrentPtr->set_back(NULL);
+      delete(temp);
+     }
+    size--;
 }

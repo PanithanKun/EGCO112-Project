@@ -78,8 +78,7 @@ void NODE::set_elemental_DMG(int d){
 
 void NODE::attack(NODE*t){
 
-
-
+  cout<<"hello"<<endl;
 
 }
 string NODE::show_elemental(){
@@ -87,4 +86,22 @@ string NODE::show_elemental(){
   
 
      return "EEEE";
+}
+void NODE::level(NODE*t,int e){
+
+
+
+}
+void NODE::heal(int heal){
+        if(current_hp+heal<Max_hp){
+            current_hp+=heal;
+        }else if(current_hp+heal>=Max_hp){
+            current_hp=Max_hp;   
+        }
+}
+int NODE::weakness_resistance(NODE* t,int g){
+
+
+
+    return 0;
 }

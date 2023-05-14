@@ -24,15 +24,18 @@ public:
       void set_back(NODE*); //set backptr
       string show_name();//show name
       int show_order();//show order no.
-      void set_order_node(int);
-      void change_hp(int);
-      int show_hp();
-      void set_name(string);
-      int show_atk();
-      int show_Max_hp();
-      void set_elemental_DMG(int);
-      int show_elemental_DMG();
+      void set_order_node(int);//set order no.
+      void change_hp(int);//cahnge hp
+      int show_hp();//show current hp
+      void set_name(string);//set monster name
+      int show_atk();//show atk
+      int show_Max_hp();//show  max hp
+      void set_elemental_DMG(int);//set elemental DMG
+      int show_elemental_DMG();//show elemental DMG
       virtual void attack(NODE*);//monster use elemental skills
-      virtual string show_elemental();
+      virtual string show_elemental();//show elemental name
+      virtual int weakness_resistance(NODE*,int);//check elemental weakness each others
+      void level(NODE*,int);//set level
+      void heal(int);
 };
 typedef NODE* NodePtr;
