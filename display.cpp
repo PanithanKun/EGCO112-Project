@@ -2,11 +2,7 @@
 using namespace std;
 #include <conio.h>
 #include <windows.h>
-class display{
-    public:
-    void welcome();
-    void loading(string);
-};
+#include "display.h"
 void display::loading(string g){
     system("cls");
     cout<<"Loading "<<g<<"..."<<endl;
