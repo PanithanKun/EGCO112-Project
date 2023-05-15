@@ -23,7 +23,7 @@ int main(int argc,char **argv){
     choose=tolower(choose);//lowercase
     try{
      if(choose<97||choose>99){
-        throw "for i in range(100) Stupid Fuck";
+        throw "Try Again!";
      }
     }
     catch(const char* error){

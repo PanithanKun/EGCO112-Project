@@ -5,10 +5,10 @@ class NODE {
        int Max_EXP; // Monster MAX_HP
        int lvl; // monster level
        int atk; // monster Attack DMG
-       int elemental_DMG;// monster elemental DMG
        int order;//order of monster
        int current_hp; // monster current HP
        int Max_hp;
+      int elemental_DMG;// monster elemental DMG
        string Name; // monster name
        //==============================
         NODE *nextPtr;// next pointer
@@ -30,11 +30,11 @@ public:
       void set_name(string);//set monster name
       int show_atk();//show atk
       int show_Max_hp();//show  max hp
-      void set_elemental_DMG(int);//set elemental DMG
-      int show_elemental_DMG();//show elemental DMG
       virtual void attack(NODE*);//monster use elemental skills
       virtual string show_elemental();//show elemental name
       virtual int weakness_resistance(NODE*,int);//check elemental weakness each others
+      virtual void Take_DMG(NODE*); //Take dmg from enemy monster
+      virtual int show_elemental_DMG(); //show elemetnal DMG
       void level(NODE*,int);//set level
       void heal(int);
 };

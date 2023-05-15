@@ -7,7 +7,7 @@ El_monster::El_monster(int atk,int hp,int size,string name):NODE(atk,hp,size,nam
            srand(time(NULL));//random from time
            E=(rand())%100; //random number 0-100
            element();
-           set_DMG();
+           set_DMG(atk);
 } 
 El_monster::~El_monster(){
 
@@ -57,16 +57,8 @@ void El_monster::Show_NODE(){
 void El_monster::attack(NODE* t){
      int DMG;
     int Crit;
-     if(Pyro==1){
-         DMG=Pyro_DMG;
-       }else if(Hydro==1){
-         DMG=Hydro_DMG;
-       }else if(Geo==1){
-        DMG=Geo_DMG;
-       }else if(Anemo==1){
-        DMG=Anemo_DMG;
-       }
-       DMG=weakness_resistance(t,DMG);
+    DMG=this->show_elemental_DMG();
+       DMG=this->weakness_resistance(t,DMG);
     srand(time(NULL));
     Crit=(int)(rand()%100);
     if(Crit>=95){
@@ -74,7 +66,7 @@ void El_monster::attack(NODE* t){
     }else{
       Crit=0;
     }
-    DMG+=(0.1*NODE::show_Max_hp());
+    DMG+=(0.1*this->show_Max_hp());
    if(Crit==1){
 
     DMG=DMG*(1+0.5);
@@ -90,6 +82,7 @@ if(t->show_hp()-(DMG)>0){
     cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
   }
 } else if(t->show_hp()-(DMG)<=0){
+   t->change_hp(DMG); 
     if(Crit==0){
    cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
   }else if(Crit==1){
@@ -97,26 +90,23 @@ if(t->show_hp()-(DMG)>0){
     cout<<'['<<t->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
     Sleep(1500);
    }     
-   t->change_hp(DMG); 
   } 
    }
 }
-void El_monster::set_DMG(){
-  int DMG;
+void El_monster::set_DMG(int atk){
       if(Pyro==1){
-         Pyro_DMG=show_atk()*(1+0.1);//set Pyro DMG
-         DMG=Pyro_DMG;
+         Pyro_DMG=atk*(1+0.1);//set Pyro DMG
+         elemental_DMG=Pyro_DMG;
        }else if(Hydro==1){
-         Hydro_DMG=show_atk()*(1+0.1);//set Hydro DMG
-         DMG=Hydro_DMG;
+         Hydro_DMG=atk*(1+0.1);//set Hydro DMG
+         elemental_DMG=Hydro_DMG;
        }else if(Geo==1){
-        DMG=Geo_DMG;
-        Geo_DMG=show_atk()*(1+0.1);//set Geo DMG
+        elemental_DMG=Geo_DMG;
+        Geo_DMG=atk*(1+0.1);//set Geo DMG
        }else if(Anemo==1){
-       Anemo_DMG=show_atk()*(1+0.1);//set Anemo DMG
-        DMG=Anemo_DMG;
+       Anemo_DMG=atk*(1+0.1);//set Anemo DMG
+        elemental_DMG=Anemo_DMG;
        }
-     NODE::set_elemental_DMG(DMG);
 }
 string El_monster::show_elemental(){
     string e;
@@ -179,4 +169,57 @@ int El_monster::weakness_resistance(NODE*t,int dmg){
    }
 
    return dmg;
+}
+void El_monster::Take_DMG(NODE*t){
+     int DMG;
+    int Crit;
+    DMG=t->show_elemental_DMG();
+    cout<<"["<<DMG<<"]"<<endl;
+    Sleep(1000);
+       DMG=t->weakness_resistance(this,DMG);
+    srand(time(NULL));
+    Crit=(int)(rand()%100);
+    if(Crit>=95){
+      Crit=1;
+    }else{
+      Crit=0;
+    }
+    DMG+=(0.1*t->show_Max_hp());
+   if(Crit==1){
+
+    DMG=DMG*(1+0.5);
+   }
+   Sleep(1500);
+   if(this->show_hp()>=0){
+if(this->show_hp()-(DMG)>0){
+  this->change_hp(DMG);
+  if(Crit==0){
+   Sleep(1000);
+   cout<<'['<<this->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+   Sleep(1000);
+  }else if(Crit==1){
+   Sleep(1000);
+    cout<<"[Critical ATK!]"<<endl;
+    Sleep(1000);
+    cout<<'['<<this->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+    Sleep(1000);
+  }
+} else if(this->show_hp()-(DMG)<=0){
+   this->change_hp(DMG); 
+    if(Crit==0){
+      Sleep(1000);
+   cout<<'['<<this->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+   Sleep(1000);
+  }else if(Crit==1){
+    Sleep(1500);
+    cout<<"[Critical ATK!]"<<endl;
+    Sleep(1000);
+    cout<<'['<<this->show_name()<<" takes "<<DMG<<" DMG!]"<<endl;
+    Sleep(1500);
+   }     
+  } 
+   }
+}
+int El_monster::show_elemental_DMG(){
+   return  elemental_DMG;
 }

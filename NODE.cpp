@@ -12,6 +12,7 @@ NODE::NODE(int Atk ,int Hp,int Or,string name){
           order=Or;
           nextPtr=NULL;
           pPtr=NULL;
+          
 }
 NODE::~NODE(){
       cout<<"Killed Monster "<<this->show_order()<<endl;
@@ -64,17 +65,6 @@ int NODE::show_atk(){
 void NODE::set_name(string n){
      Name=n;
 }
-int NODE::show_elemental_DMG(){
-
-    return elemental_DMG;
-
-}
-void NODE::set_elemental_DMG(int d){
-
-   elemental_DMG=d;
- 
-
-}
 
 void NODE::attack(NODE*t){
 
@@ -103,5 +93,12 @@ int NODE::weakness_resistance(NODE* t,int g){
 
 
 
+    return 0;
+}
+void NODE::Take_DMG(NODE*t){
+
+    
+}
+int NODE::show_elemental_DMG(){
     return 0;
 }

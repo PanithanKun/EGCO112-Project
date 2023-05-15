@@ -6,7 +6,8 @@ using namespace std;
 LL::LL(string n,int a){
      trainer=n;
      atk=a;
-     hp=100;
+     hp=300;
+     max_hp=hp;
      size=0;
      HeadPtr=NULL;
 }
@@ -23,7 +24,7 @@ void LL::ADD(LL* q){//ADD NODE
     int atk=(rand())%20;//ATK DMG 0-20
       cout<<".";
       Sleep(500);
-   int hp=(rand())%101;//HP 0-60
+   int hp=(rand())%101;//HP 0-100
       cout<<"."<<endl;
       Sleep(500);
     string name="Unknown";//Monster name
@@ -31,9 +32,11 @@ void LL::ADD(LL* q){//ADD NODE
      NodePtr Currentptr = NULL;
      NodePtr Previousptr = NULL;
      bool A;
-     Random(atk,hp);//Random stats
+  
      if(!temp){
-          temp= new El_monster(atk,hp,size+1,name);  // create NOde 
+         Random(atk,hp);//Random stats
+          temp= new El_monster(atk,hp,size+1,name);  
+          cout<<"["<<temp->show_elemental_DMG()<<"]"<<endl;// create NOde 
           sel=Select_fight(temp);
           if(sel==1){
              A=q->fight(temp,q); // fight (false if escape and true if capture successfully)
@@ -50,7 +53,9 @@ void LL::ADD(LL* q){//ADD NODE
           }
           
      }else{
+         Random(atk,hp);//Random stats
           temp= new El_monster(atk,hp,size+1,name);  // create NOde 
+          cout<<"["<<temp->show_elemental_DMG()<<"]"<<endl;// create NOde 
           sel=Select_fight(temp);
           if(sel==1){
           bool A=q->fight(temp,q); // fight (false if escape and true if capture successfully)       
@@ -96,10 +101,14 @@ void LL::Delete_all(){//DELETE ALL NODES
 void LL::Random(int& atk, int& hp){//Random stats
 if(atk<10){ //atk>=10
 atk=10;
+}else if(atk>20){
+  atk=20;
 }
 if(hp<50){ //hp>=50
      hp=50;
-}    
+}else if(hp>100){
+     hp=100;
+}   
 }
 bool LL::Select( char select){//check select
      bool A;
@@ -232,6 +241,8 @@ bool LL::fight(NODE *t,LL*q){
     char select;
     bool A;
     int fight=0;
+    int sel=0;
+    NodePtr select_mon=NULL;
     do{
     if(q->size==0){
      do{
@@ -246,6 +257,19 @@ bool LL::fight(NODE *t,LL*q){
     cin>>select;
     select=tolower(select);
     cout<<'['<<select<<']'<<endl;
+     try{
+     if(select<97||select>100){
+      throw "Try Again!";
+     } 
+
+
+    }
+    catch(const char* e){
+      Sleep(1000);
+      cout<<e<<endl;
+       Sleep(1000);
+      continue;
+    }
     switch (select)
     {
     case ('a'):
@@ -275,6 +299,7 @@ bool LL::fight(NODE *t,LL*q){
      break;
      case('d'):
      A=false;
+     fight=1;
      break;
     }
     if(select!='d'&&A==false){
@@ -291,16 +316,15 @@ bool LL::fight(NODE *t,LL*q){
       Sleep(1500);
       fight=1;
     }
-    if(q->show_hp()==0){
+    if(q->show_hp()<=0){
        fight=1;
     }
     }while(select>=97&&select<=99&&t->show_hp()>0&& A==false&&q->show_hp()>0);
     }else if(q->show_size()>0){
-      int sel=0;
+      
     do{
       int turn=1;
       int order;
-      NodePtr select_mon=NULL;
       q->Show_all();
           if(sel==0){
        do{
@@ -331,6 +355,19 @@ bool LL::fight(NODE *t,LL*q){
     cin>>select;
     select=tolower(select);
     cout<<'['<<select<<']'<<endl;
+    try{
+     if(select<97||select>100){
+      throw "Try Again!";
+     } 
+
+
+    }
+    catch(const char* e){
+       Sleep(1000);
+      cout<<e<<endl;
+       Sleep(1000);
+      continue;
+    }
     switch (select)
     {
     case ('a'):
@@ -343,6 +380,7 @@ bool LL::fight(NODE *t,LL*q){
          q->use_potion_to_monster(select_mon);
        }else{
        cout<<"Potion is Empty"<<endl;
+       continue;
        }
         break;
     case('c'):
@@ -357,17 +395,23 @@ bool LL::fight(NODE *t,LL*q){
      break;
      case('d'):
      A=false;
+     fight=1;
      break;
     }
     if(select!='d'&&A==false){
        turn=0;
        if(turn==0&&t->show_hp()>0){
+        Sleep(1000);
           cout<<"Out of Turn!"<<endl;
-         t->attack(select_mon);
+          select_mon->Take_DMG(t);
+          if(select_mon==NULL){
+            cout<<"noooooooooo"<<endl;
+          }
        }                                                                                                                                                                                                                                                                                                         
     }
     if(select_mon->show_hp()<=0){
       cout<<"Monster "<<select_mon->show_name()<<" have been killed"<<endl;
+      sel==0;
       q->delete_dead_monster(select_mon,q);
     }
     if(t->show_hp()<=0){
@@ -377,7 +421,10 @@ bool LL::fight(NODE *t,LL*q){
       Sleep(1500);
       fight=1;
     }
-    }while(select>=97&&select<=99&&t->show_hp()>0&& A==false&&q->show_hp()>0);
+    if(A==true){
+      break;
+    }
+    }while(select>=97&&select<=99&&t->show_hp()>0&& A==false&&size>0);
 
     }
     }while(fight==0);
@@ -521,7 +568,7 @@ void LL::take_DMG(NODE*t){
     }else{
       Crit=0;
     }
-    DMG=t->show_elemental_DMG()+((0.1)*max_hp);
+    DMG=t->show_elemental_DMG()+((0.05)*max_hp);
    
    if(Crit==1){
 
@@ -626,4 +673,7 @@ void LL::delete_dead_monster(NODE*t,LL* q){//delete node
       delete(temp);
      }
     size--;
+    if(size==0){
+
+    }
 }

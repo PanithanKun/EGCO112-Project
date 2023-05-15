@@ -7,9 +7,9 @@ class LL{
    string trainer;
    int atk;
    int size;
-   int max_hp=100;
+   int max_hp;
    int hp=max_hp;
-   int potions=3;
+   int potions;
    public:
    LL(string="Hum",int=20);
    ~LL();
@@ -45,11 +45,13 @@ class El_monster :public NODE{
         int Hydro=0; //Water
         int Geo=0; //Stone
         int Anemo=0; //Wind
-
+      
         int Pyro_DMG; //Fire DMG
         int Hydro_DMG; //Water DMG
         int Geo_DMG; //Stone DMG
         int Anemo_DMG; //Wind DMG
+
+        int elemental_DMG;// monster elemental DMG
 
 public:
      El_monster(int,int,int,string="Unknown"); //Create Element of monster 
@@ -57,8 +59,10 @@ public:
      void element(); // set Element
      void Show_NODE();//show node
      void attack(NODE*);//monster use elemental skills
-     void set_DMG();// set elemental DMG
+     void set_DMG(int);// set elemental DMG
+     int show_elemental_DMG(); //show elemental DMG
      string show_elemental();//show elemental
      int weakness_resistance(NODE*,int);//check elemental weakness each others
+     void Take_DMG(NODE*);// take dmg from enemy monster
 };
 typedef El_monster* ElPtr;
