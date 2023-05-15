@@ -32,7 +32,7 @@ class LL{
    bool Check_num(string);//check var
    void Add_boss(LL*);//add boss node
    bool Check_boss(NODE*);//check if it's a boss
-   bool Boss_start(LL*);//initiate boss match
+   void Boss_start(LL*);//initiate boss match
    int show_Max_hp();//show max_hp
    bool capture(NODE*t);//capture monster
    int show_size();//show size
@@ -69,27 +69,4 @@ public:
      void Take_DMG(NODE*);// take dmg from enemy monster
 };
 typedef El_monster* ElPtr;
-class Boss :public NODE{
-        int E; //Elemental type
-        int Pyro=0; //Fire
-        int Hydro=0; //Water
-        int Geo=0; //Stone
-        int Anemo=0; //Wind
-
-        int Pyro_DMG; //Fire DMG
-        int Hydro_DMG; //Water DMG
-        int Geo_DMG; //Stone DMG
-        int Anemo_DMG; //Wind DMG
-
-public:
-     Boss(int,int,int,string="Boss"); //Create Element of monster 
-     ~Boss();
-     void element(); // set Element
-     void Show_NODE();//show node
-     void attack(NODE*);//monster use elemental skills
-     void set_DMG();// set elemental DMG
-     string show_elemental();//show elemental
-     int weakness_resistance(NODE*,int);//check elemental weakness each others
-};
-typedef Boss* BossPtr;
 

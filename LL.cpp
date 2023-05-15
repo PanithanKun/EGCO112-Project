@@ -218,7 +218,29 @@ void LL::Delete(LL* q){//delete node
     cout<<"No monster to kill!"<<endl;
   }
 }
-bool LL::Boss_start(LL *q){
+
+void LL::Add_boss(LL *q){
+  int tolhp=0,tolatk=0,atk,hp;
+  NodePtr t = q->HeadPtr;
+  /*NodePtr Currentptr = NULL;
+  NodePtr Previousptr = NULL;*/
+  while(t!=NULL){
+    tolhp+=t->show_Max_hp();
+    tolatk+=t->show_atk();
+    t=t->move_next();
+  }
+  srand(time(NULL));
+  hp=tolhp*0.5; 
+  hp+=(rand()%101-50)/100*hp;
+  //boss hp = half of sum of all current monster hp + random addition of -50% to +50% of that value
+  srand(time(NULL));
+  atk=tolatk*0.5; 
+  atk+=(rand()%51-25)/100*hp;
+  //boss hp = half of sum of all current monster hp + random addition of -25% to +25% of that value
+  NodePtr temp= new El_monster(atk,hp,size+1,"Boss");
+}
+
+void LL::Boss_start(LL *q){
   int found=0;
   NodePtr t = HeadPtr;
   while(t!=NULL||found==0){
@@ -226,7 +248,6 @@ bool LL::Boss_start(LL *q){
       found=1;
       break;
     }
-    t=t->move_next();
   }
   t=HeadPtr;
   if(found==1){
@@ -234,7 +255,9 @@ bool LL::Boss_start(LL *q){
   }
   else{
     Add_boss(q);
+    fight(t,q);
   }
+
 }
 bool LL::Check_boss(NODE *node){
   bool A;
