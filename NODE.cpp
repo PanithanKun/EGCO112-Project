@@ -78,7 +78,7 @@ string NODE::show_elemental(){
      return "EEEE";
 }
 void NODE::level(NODE*t,int e){
-
+  lvl+=e;
 
 
 }

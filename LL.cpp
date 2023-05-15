@@ -217,7 +217,32 @@ void LL::Delete(LL* q){//delete node
   }else{
     cout<<"No monster to kill!"<<endl;
   }
-
+}
+bool LL::Boss_start(LL *q){
+  int found=0;
+  NodePtr t = HeadPtr;
+  while(t!=NULL||found==0){
+    if(Check_boss(t)==true){
+      found=1;
+      break;
+    }
+    t=t->move_next();
+  }
+  t=HeadPtr;
+  if(found==1){
+    fight(t,q);
+  }
+  else{
+    Add_boss(q);
+  }
+}
+bool LL::Check_boss(NODE *node){
+  bool A;
+  if(node->show_name().compare("Boss")==0){
+    A=true;
+  }
+  else A=false;
+  return A;
 }
 bool LL::Check_num(string str){
       int i;
