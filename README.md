@@ -1,2 +1,2 @@
 # EGCO112-Project
-LAZY
+LOVE AJ MAK
