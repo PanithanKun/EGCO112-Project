@@ -19,10 +19,11 @@ int main(int argc,char **argv){
     cout<<"A.Random Monster"<<endl;
     cout<<"B.Delete Monster"<<endl;
     cout<<"C.heal All"<<endl;
+    cout<<"D. Exit"<<endl;
     choose=getch();//input
     choose=tolower(choose);//lowercase
     try{
-     if(choose<97||choose>99){
+     if(choose<97||choose>100){
         throw "Try Again!";
      }
     }
@@ -47,8 +48,10 @@ int main(int argc,char **argv){
          case('c'):
          trainer.heal_all(&trainer);
          break;
+         case('d'):
+         break;
     }
-     }while(choose!='x'&&trainer.show_hp()>0);
+     }while(choose!='d'&&trainer.show_hp()>0);
     if(trainer.show_hp()<=0){
       system("cls");
       cout<<"GAME OVER"<<endl;
